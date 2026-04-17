@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+      body {
+      font-family: Arial, sans-serif;
+      background: #0e217d;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: #8aa82f;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button.logout {
+      background: #dc3545;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px;
+      background: #eee;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top">
+        <h2>Dashboard</h2>
+        <a href="/"><button class="logout">Logout</button></a>
+    </div>
+
+    <div class="card">
+        <h3>Total Expenses: ₹<span id="total">0</span></h3>
+        <h4>Entries: <span id="count">0</span></h4>
+    </div>
+
+    <input type="text" id="desc" placeholder="Description">
+    <input type="number" id="amount" placeholder="Amount">
+    <button onclick="addExpense()">Add Expense</button>
+
+    <ul id="list"></ul>
+</div>
+
+<script>
+let expenses = [];
+
+function addExpense(){
+    let desc = document.getElementById("desc").value;
+    let amount = document.getElementById("amount").value;
+
+    if(desc === "" || amount === ""){
+        alert("Fill all fields");
+        return;
+    }
+
+    expenses.push({desc, amount: parseFloat(amount)});
+    render();
+}
+
+function render(){
+    let list = document.getElementById("list");
+    let total = 0;
+
+    list.innerHTML = "";
+
+    expenses.forEach((e, i) => {
+        total += e.amount;
+        let li = document.createElement("li");
+        li.innerHTML = `${e.desc} - ₹${e.amount} 
+        <button onclick="deleteExpense(${i})">X</button>`;
+        list.appendChild(li);
+    });
+
+    document.getElementById("total").innerText = total;
+    document.getElementById("count").innerText = expenses.length;
+}
+
+function deleteExpense(index){
+    expenses.splice(index,1);
+    render();
+}
+</script>
+
+</body>
+</html>
